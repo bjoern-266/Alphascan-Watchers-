@@ -1,0 +1,9 @@
+{
+  "name": "AlphaScan Watcher",
+  "short_name": "AlphaScan",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0B1120",
+  "theme_color": "#0B1120",
+  "icons": []
+}
