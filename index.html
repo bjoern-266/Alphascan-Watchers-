@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="AlphaScan" />
+<meta name="theme-color" content="#0B1120" />
+<link rel="manifest" href="manifest.json" />
+<title>AlphaScan Watcher</title>
+<style>
+  :root {
+    --bg: #0B1120;
+    --surface: #131B2E;
+    --border: #22304A;
+    --text: #E5E9F0;
+    --text-muted: #7C8698;
+    --green: #34D399;
+    --amber: #FBBF24;
+    --red: #F87171;
+    --green-dim: rgba(52, 211, 153, 0.12);
+    --red-dim: rgba(248, 113, 113, 0.10);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 3rem;
+  }
+  .mono { font-family: 'JetBrains Mono', 'Courier New', monospace; }
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(11, 17, 32, 0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 1.25rem 0.9rem;
+  }
+  .header-top { display: flex; align-items: center; gap: 0.7rem; }
+  .radar { position: relative; width: 20px; height: 20px; flex-shrink: 0; }
+  .radar-dot { position: absolute; top: 6px; left: 6px; width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+  .radar-ring { position: absolute; inset: 0; border-radius: 50%; border: 1.5px solid var(--green); opacity: 0; animation: pulse 2.4s ease-out infinite; }
+  .radar-ring.delay { animation-delay: 1.2s; }
+  @keyframes pulse { 0% { transform: scale(0.3); opacity: 0.7; } 100% { transform: scale(1.6); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .radar-ring { animation: none; opacity: 0; } }
+  h1 { font-family: 'Space Grotesk', 'Inter', sans-serif; font-size: 1.15rem; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+  .status-line { margin-top: 0.55rem; display: flex; justify-content: space-between; align-items: baseline; font-size: 0.8rem; color: var(--text-muted); }
+  .status-line strong { color: var(--text); font-weight: 500; }
+  main { padding: 1.1rem 1.25rem 0; max-width: 640px; margin: 0 auto; }
+  .banner { border: 1px solid var(--border); background: var(--surface); border-radius: 12px; padding: 0.9rem 1rem; margin-bottom: 1.2rem; font-size: 0.85rem; color: var(--text-muted); }
+  .section-label { font-family: 'Space Grotesk', sans-serif; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin: 1.4rem 0 0.6rem; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 0.7rem; overflow: hidden; }
+  .card.passed { border-color: rgba(52, 211, 153, 0.45); background: linear-gradient(180deg, var(--green-dim), var(--surface) 60%); }
+  .card.error { border-color: rgba(248, 113, 113, 0.35); }
+  .card-head { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1rem; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .ticker { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 1rem; }
+  .price { font-size: 0.85rem; color: var(--text-muted); margin-left: 0.5rem; }
+  .badge { font-size: 0.68rem; font-weight: 600; padding: 0.25rem 0.55rem; border-radius: 999px; letter-spacing: 0.02em; }
+  .badge.pass { background: var(--green-dim); color: var(--green); }
+  .badge.watch { background: rgba(251, 191, 36, 0.12); color: var(--amber); }
+  .badge.err { background: var(--red-dim); color: var(--red); }
+  .card-body { display: none; padding: 0 1rem 1rem; border-top: 1px solid var(--border); }
+  .card-body.open { display: block; }
+  .check-row { display: flex; align-items: center; gap: 0.55rem; padding: 0.4rem 0; font-size: 0.82rem; color: var(--text-muted); }
+  .check-row.ok { color: var(--text); }
+  .check-icon { width: 1rem; text-align: center; flex-shrink: 0; }
+  .check-row.ok .check-icon { color: var(--green); }
+  .check-row:not(.ok) .check-icon { color: var(--red); }
+  .marks { display: flex; gap: 1.1rem; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border); font-size: 0.82rem; }
+  .mark-label { color: var(--text-muted); display: block; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .mark-value { font-weight: 600; }
+  .mark-value.stop { color: var(--red); }
+  .mark-value.target { color: var(--green); }
+  .empty { text-align: center; padding: 2.5rem 1rem; color: var(--text-muted); font-size: 0.9rem; }
+  .footer-note { margin-top: 2rem; padding: 0.9rem 1rem; font-size: 0.75rem; color: var(--text-muted); text-align: center; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="radar">
+      <div class="radar-ring"></div>
+      <div class="radar-ring delay"></div>
+      <div class="radar-dot"></div>
+    </div>
+    <h1>AlphaScan Watcher</h1>
+  </div>
+  <div class="status-line">
+    <span id="scan-time">Lade letzten Scan…</span>
+    <span id="scan-window" class="mono"></span>
+  </div>
+</header>
+
+<main>
+  <div class="banner" id="skip-banner" style="display:none;"></div>
+  <div class="section-label">Aktueller Scan</div>
+  <div id="current-results"></div>
+  <div class="section-label">Verlauf</div>
+  <div id="history-results"></div>
+  <div class="footer-note">
+    Automatischer Vorfilter (Trend, RSI, CRV ≥ 2:1, Liquidität, kein Kurssprung).<br/>
+    Kein Ersatz für die vollständige AlphaScan-Prüfung — vor jedem Kauf Nachrichtenlage & Makro-Ampel im Chat abgleichen.
+  </div>
+</main>
+
+<script>
+async function loadJSON(path) {
+  try {
+    const res = await fetch(path + '?t=' + Date.now());
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (e) { return null; }
+}
+function fmtTime(iso) {
+  if (!iso) return '–';
+  const d = new Date(iso);
+  return d.toLocaleString('de-DE', { weekday: 'short', hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' });
+}
+function renderChecks(checks) {
+  return Object.entries(checks).map(([name, ok]) => `
+    <div class="check-row ${ok ? 'ok' : ''}">
+      <span class="check-icon">${ok ? '✓' : '✕'}</span>
+      <span>${name}</span>
+    </div>
+  `).join('');
+}
+function renderCard(r, idx) {
+  if (r.error) {
+    return `
+      <div class="card error">
+        <div class="card-head">
+          <div><span class="ticker mono">${r.ticker}</span></div>
+          <span class="badge err">Fehler</span>
+        </div>
+        <div class="card-body open" style="display:block;">
+          <div class="check-row">${r.error}</div>
+        </div>
+      </div>`;
+  }
+  const badgeClass = r.passed ? 'pass' : 'watch';
+  const badgeText = r.passed ? 'Setup erkannt' : 'Beobachten';
+  const cardId = `card-${idx}-${r.ticker}`;
+  return `
+    <div class="card ${r.passed ? 'passed' : ''}">
+      <div class="card-head" onclick="document.getElementById('${cardId}').classList.toggle('open')">
+        <div>
+          <span class="ticker mono">${r.ticker}</span>
+          <span class="price mono">${r.close}</span>
+        </div>
+        <span class="badge ${badgeClass}">${badgeText}</span>
+      </div>
+      <div class="card-body" id="${cardId}">
+        ${renderChecks(r.checks)}
+        <div class="marks">
+          <div><span class="mark-label">Stop-Loss</span><span class="mark-value stop mono">${r.stop}</span></div>
+          <div><span class="mark-label">Kursziel</span><span class="mark-value target mono">${r.target}</span></div>
+          <div><span class="mark-label">CRV</span><span class="mark-value mono">${r.crv}:1</span></div>
+          <div><span class="mark-label">RSI</span><span class="mark-value mono">${r.rsi}</span></div>
+        </div>
+      </div>
+    </div>`;
+}
+async function render() {
+  const results = await loadJSON('results.json');
+  const history = await loadJSON('history.json');
+  const banner = document.getElementById('skip-banner');
+  const scanTime = document.getElementById('scan-time');
+  const scanWindow = document.getElementById('scan-window');
+  const currentEl = document.getElementById('current-results');
+  const historyEl = document.getElementById('history-results');
+  if (!results) {
+    currentEl.innerHTML = '<div class="empty">Noch keine Scan-Daten vorhanden.<br/>Der erste Lauf im Zeitfenster erstellt sie automatisch.</div>';
+    scanTime.textContent = 'Kein Scan bisher';
+    return;
+  }
+  scanTime.innerHTML = `Letzter Scan: <strong>${fmtTime(results.timestamp)}</strong>`;
+  scanWindow.textContent = '15:30–22:30';
+  if (results.skipped) {
+    banner.style.display = 'block';
+    banner.textContent = `Letzter Lauf außerhalb des Handelsfensters übersprungen (${results.skip_reason || ''}).`;
+  } else {
+    banner.style.display = 'none';
+  }
+  if (!results.results || results.results.length === 0) {
+    currentEl.innerHTML = '<div class="empty">Kein aktueller Scan im Zeitfenster.</div>';
+  } else {
+    const sorted = [...results.results].sort((a, b) => (b.passed ? 1 : 0) - (a.passed ? 1 : 0));
+    currentEl.innerHTML = sorted.map((r, i) => renderCard(r, i)).join('');
+  }
+  if (history && history.length > 1) {
+    const previous = history.slice(0, -1).reverse().slice(0, 5);
+    historyEl.innerHTML = previous.map(h => {
+      const hits = (h.results || []).filter(r => r.passed);
+      const label = h.skipped ? 'übersprungen (außerhalb Zeitfenster)' : hits.length > 0 ? `${hits.length} Setup(s): ${hits.map(r => r.ticker).join(', ')}` : 'kein Treffer';
+      return `<div class="banner" style="margin-bottom:0.5rem;"><span class="mono">${fmtTime(h.timestamp)}</span> — ${label}</div>`;
+    }).join('');
+  } else {
+    historyEl.innerHTML = '<div class="empty">Noch kein Verlauf vorhanden.</div>';
+  }
+}
+render();
+</script>
+</body>
+</html>
