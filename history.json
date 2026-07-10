@@ -627,5 +627,11 @@
         "error": "zu wenig Kursdaten"
       }
     ]
+  },
+  {
+    "timestamp": "2026-07-10T22:41:06.503274+02:00",
+    "skipped": true,
+    "skip_reason": "Ausserhalb Zeitfenster oder Wochenende",
+    "results": []
   }
 ]
