@@ -1950,5 +1950,11 @@
         "error": "zu wenig Kursdaten"
       }
     ]
+  },
+  {
+    "timestamp": "2026-07-20T23:36:17.086280+02:00",
+    "skipped": true,
+    "skip_reason": "Ausserhalb Zeitfenster oder Wochenende",
+    "results": []
   }
 ]
