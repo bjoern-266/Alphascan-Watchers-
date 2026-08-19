@@ -1,52 +1,5 @@
 [
   {
-    "timestamp": "2026-08-03T17:43:58.015566+02:00",
-    "skipped": false,
-    "skip_reason": "",
-    "results": [
-      {
-        "ticker": "AAPL",
-        "error": "zu wenig Kursdaten"
-      },
-      {
-        "ticker": "MSFT",
-        "error": "zu wenig Kursdaten"
-      },
-      {
-        "ticker": "NVDA",
-        "error": "zu wenig Kursdaten"
-      },
-      {
-        "ticker": "AMD",
-        "error": "zu wenig Kursdaten"
-      },
-      {
-        "ticker": "IBM",
-        "error": "zu wenig Kursdaten"
-      },
-      {
-        "ticker": "MU",
-        "error": "zu wenig Kursdaten"
-      },
-      {
-        "ticker": "DTG.DE",
-        "error": "zu wenig Kursdaten"
-      },
-      {
-        "ticker": "CENT",
-        "error": "zu wenig Kursdaten"
-      },
-      {
-        "ticker": "SLB",
-        "error": "zu wenig Kursdaten"
-      },
-      {
-        "ticker": "PYPL",
-        "error": "zu wenig Kursdaten"
-      }
-    ]
-  },
-  {
     "timestamp": "2026-08-03T19:30:13.567014+02:00",
     "skipped": false,
     "skip_reason": "",
@@ -3998,6 +3951,53 @@
   },
   {
     "timestamp": "2026-08-19T18:02:09.795184+02:00",
+    "skipped": false,
+    "skip_reason": "",
+    "results": [
+      {
+        "ticker": "AAPL",
+        "error": "zu wenig Kursdaten"
+      },
+      {
+        "ticker": "MSFT",
+        "error": "zu wenig Kursdaten"
+      },
+      {
+        "ticker": "NVDA",
+        "error": "zu wenig Kursdaten"
+      },
+      {
+        "ticker": "AMD",
+        "error": "zu wenig Kursdaten"
+      },
+      {
+        "ticker": "IBM",
+        "error": "zu wenig Kursdaten"
+      },
+      {
+        "ticker": "MU",
+        "error": "zu wenig Kursdaten"
+      },
+      {
+        "ticker": "DTG.DE",
+        "error": "zu wenig Kursdaten"
+      },
+      {
+        "ticker": "CENT",
+        "error": "zu wenig Kursdaten"
+      },
+      {
+        "ticker": "SLB",
+        "error": "zu wenig Kursdaten"
+      },
+      {
+        "ticker": "PYPL",
+        "error": "zu wenig Kursdaten"
+      }
+    ]
+  },
+  {
+    "timestamp": "2026-08-19T18:44:10.807050+02:00",
     "skipped": false,
     "skip_reason": "",
     "results": [
