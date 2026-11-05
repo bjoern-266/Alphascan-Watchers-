@@ -1,11 +1,5 @@
 [
   {
-    "timestamp": "2026-09-03T23:55:27.118670+02:00",
-    "skipped": true,
-    "skip_reason": "Ausserhalb Zeitfenster oder Wochenende",
-    "results": []
-  },
-  {
     "timestamp": "2026-09-04T18:45:57.006073+02:00",
     "skipped": false,
     "skip_reason": "",
@@ -2689,5 +2683,11 @@
         "error": "zu wenig Kursdaten"
       }
     ]
+  },
+  {
+    "timestamp": "2026-11-05T01:56:37.276995+01:00",
+    "skipped": true,
+    "skip_reason": "Ausserhalb Zeitfenster oder Wochenende",
+    "results": []
   }
 ]
