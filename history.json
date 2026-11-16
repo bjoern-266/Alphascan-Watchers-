@@ -1,11 +1,5 @@
 [
   {
-    "timestamp": "2026-09-10T23:47:59.640735+02:00",
-    "skipped": true,
-    "skip_reason": "Ausserhalb Zeitfenster oder Wochenende",
-    "results": []
-  },
-  {
     "timestamp": "2026-09-11T18:56:11.314381+02:00",
     "skipped": false,
     "skip_reason": "",
@@ -2563,6 +2557,12 @@
   },
   {
     "timestamp": "2026-11-14T01:57:57.879499+01:00",
+    "skipped": true,
+    "skip_reason": "Ausserhalb Zeitfenster oder Wochenende",
+    "results": []
+  },
+  {
+    "timestamp": "2026-11-16T23:45:27.701430+01:00",
     "skipped": true,
     "skip_reason": "Ausserhalb Zeitfenster oder Wochenende",
     "results": []
